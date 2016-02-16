@@ -1,0 +1,40 @@
+/*
+ * main_2a.c
+ *
+ *  Created on: 16 de feb. de 2016
+ *      Author: coke
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int valor_max(int a[]){
+	int aux = 0;
+	for(int i=0; i<10; i++){
+		if(a[i]>aux){
+			aux = a[i];
+		}
+	}
+	return aux;
+}
+
+int posicion(int a[], int b){
+	int aux = 0;
+	for(int i=0; i<10; i++){
+		if(a[i]==b){
+			aux = i;
+		}
+	}
+	return aux;
+}
+
+int main(void) {
+
+	int a[10] = {3, 5, 12, 8, 7, 22, 14, 4, 7, 11};
+	int v_max = valor_max(a);
+	int pos = posicion(a, v_max);
+
+	printf("El valor máximo es %d situado en la posicion %d\n", v_max, pos);
+
+	return 0;
+}
