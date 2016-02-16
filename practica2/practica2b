@@ -1,0 +1,41 @@
+/*
+ * main_2a.c
+ *
+ *  Created on: 16 de feb. de 2016
+ *      Author: coke
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+
+
+
+int main(void) {
+
+	FILE *ptr_file;
+	
+	char letra = "";
+	int numero = 0;
+
+	ptr_file = fopen("Entrada2b.txt", "r");
+	if(!ptr_file){
+		return 1;
+	}
+	while(1){
+
+		
+		if( feof(ptr_file)){
+			break ;
+		}
+
+		fscanf(ptr_file, "%s %d", letra, numero);
+		char letra_mayuscula = putchar (toupper(letra));
+		for(int i=0; i < numero; i++){
+			printf("%s", letra_mayuscula);
+		}
+		printf("\n");
+
+	}
+
+	return 0;
+}
