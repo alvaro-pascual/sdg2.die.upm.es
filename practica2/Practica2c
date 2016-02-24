@@ -1,0 +1,66 @@
+/*
+ * main_1a.c
+ *
+ *  Created on: 4 de ene. de 2016
+ *      Author: alumno
+ */
+
+#define NUM_USUARIOS 100
+#include "usuarios.h"
+#include <stdio.h>
+
+
+int DNI=34567;
+
+int main ()
+{
+	FILE *ptr_file;
+	ptr_file = fopen("/root/practica2/Usuarios.txt", "r");
+
+	if (!ptr_file){
+		return 1;
+	}
+
+	char nom[MAX_CHAR];
+	char ap[MAX_CHAR];
+	int i, dni, nac;
+
+	for(i=0; i<NUM_USUARIOS-1; i++){
+		fscanf(ptr_file, "%s %s %d %d", nom, ap, &dni, &nac);
+		if(dni == DNI){
+			printf("El usuario es %s %s %d %d\n", nom, ap, dni, nac);
+			fclose(ptr_file);
+			return 0;
+		}
+	}
+	fclose(ptr_file);
+	return 2;
+}
+
+
+
+
+
+
+/*
+ * usuarios.h
+ *
+ *  Created on: 24 de feb. de 2016
+ *      Author: alumno
+ */
+
+#ifndef USUARIOS_H_
+#define USUARIOS_H_
+
+#define MAX_CHAR 50
+typedef struct usuario{
+	char Nombre[MAX_CHAR];
+	char Apellido[MAX_CHAR];
+	int DNI;
+	int Nacimiento;
+}Usuario;
+
+
+#endif /* USUARIOS_H_ */
+
+
