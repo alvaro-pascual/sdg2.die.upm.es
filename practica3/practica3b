@@ -1,0 +1,39 @@
+/*
+ * main_1a.c
+ *
+ *  Created on: 4 de ene. de 2016
+ *      Author: alumno
+ */
+
+#include <stdio.h>
+#include <wiringPi.h>
+
+int main (){
+	wiringPiSetupGpio();
+
+	pinMode(1,OUTPUT);
+	digitalWrite(1, HIGH);
+	pinMode(0,OUTPUT);
+	pinMode(7,OUTPUT);
+	digitalWrite(0, HIGH);
+
+	pinMode(5, INPUT);
+	while(1){
+		if(digitalRead(5)){
+			digitalWrite(7, HIGH);
+		}
+		else{
+			digitalWrite(7, LOW);
+		}
+
+				
+
+	}
+
+
+
+
+
+
+	return 0;
+}
