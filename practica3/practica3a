@@ -1,0 +1,24 @@
+/*
+ * main_1a.c
+ *
+ *  Created on: 4 de ene. de 2016
+ *      Author: alumno
+ */
+
+#include <stdio.h>
+#include <wiringPi.h>
+
+int main (){
+	wiringPiSetupGpio();
+
+	pinMode(1,OUTPUT);
+	digitalWrite(1, HIGH);
+
+	while(1){
+		delay(100);
+		digitalWrite(1, LOW);
+		delay(100);
+		digitalWrite(1, HIGH);
+	}
+	return 0;
+}
