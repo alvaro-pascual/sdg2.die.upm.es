@@ -1,0 +1,233 @@
+/*
+ * main_1a.c
+ *
+ *  Created on: 4 de ene. de 2016
+ *      Author: alumno
+ */
+
+#include <stdio.h>
+#include <wiringPi.h>
+
+int main (){
+	wiringPiSetupGpio();
+
+	pinMode(5,INPUT);
+	pinMode(6,INPUT);
+	pinMode(12,INPUT);
+	pinMode(13,INPUT);
+
+	pinMode(0,OUTPUT);
+	pinMode(1,OUTPUT);
+	pinMode(2,OUTPUT);
+	pinMode(3,OUTPUT);
+
+	pinMode(17,OUTPUT);
+	pinMode(18,OUTPUT);
+	pinMode(22,OUTPUT);
+	pinMode(23,OUTPUT);
+
+	digitalWrite(1, LOW);
+	digitalWrite(2, LOW);
+	digitalWrite(3, LOW);
+	digitalWrite(0, LOW);
+	digitalWrite(5, LOW);
+	digitalWrite(6, LOW);
+	digitalWrite(12, LOW);
+	digitalWrite(13, LOW);
+
+	static char teclas[4][4]={{"123C"},{"456D"},{"789E"},{"A0BF"}};
+	while(1){
+
+		//columna 1
+		digitalWrite(0, HIGH);digitalWrite(17, HIGH);
+		if(digitalRead(5)){
+			while(digitalRead(5)){
+				delay(20);
+			}
+			printf("Tecla: %c\n", teclas[0][0]);
+			delay(20);
+		}
+
+		if(digitalRead(6)){
+			while(digitalRead(6)){
+				delay(20);
+			}
+			printf("Tecla: %c\n", teclas[1][0]);
+			delay(20);
+		}
+
+		if(digitalRead(12)){
+			while(digitalRead(12)){
+				delay(20);
+			}
+			printf("Tecla: %c\n", teclas[2][0]);
+			delay(20);
+		}
+
+		if(digitalRead(13)){
+			while(digitalRead(13)){
+				delay(20);
+			}
+			printf("Tecla: %c\n", teclas[3][0]);
+			delay(20);
+		}
+		delay(20);
+
+		digitalWrite(0, LOW);
+
+
+		//columna 2
+		digitalWrite(1, HIGH);digitalWrite(18, HIGH);
+		if(digitalRead(5)){
+			while(digitalRead(5)){
+				delay(20);
+			}
+			printf("Tecla: %c\n", teclas[0][1]);
+			delay(20);
+		}
+
+		if(digitalRead(6)){
+			while(digitalRead(6)){
+				delay(20);
+			}
+			printf("Tecla: %c\n", teclas[1][1]);
+			delay(20);
+		}
+
+		if(digitalRead(12)){
+			while(digitalRead(12)){
+				delay(20);
+			}
+			printf("Tecla: %c\n", teclas[2][1]);
+			delay(20);
+		}
+
+		if(digitalRead(13)){
+			while(digitalRead(13)){
+				delay(20);
+			}
+			printf("Tecla: %c\n", teclas[3][1]);
+			delay(20);
+		}
+
+		delay(20);
+		digitalWrite(1, LOW);
+
+		//columna 3
+		digitalWrite(2, HIGH);digitalWrite(22, HIGH);
+		if(digitalRead(5)){
+			while(digitalRead(5)){
+				delay(20);
+			}
+			printf("Tecla: %c\n", teclas[0][2]);
+			delay(20);
+		}
+
+		if(digitalRead(6)){
+			while(digitalRead(6)){
+				delay(20);
+			}
+			printf("Tecla: %c\n", teclas[1][2]);
+			delay(20);
+		}
+
+		if(digitalRead(12)){
+			while(digitalRead(12)){
+				delay(20);
+			}
+			printf("Tecla: %c\n", teclas[2][2]);
+			delay(20);
+		}
+
+		if(digitalRead(13)){
+			while(digitalRead(13)){
+				delay(20);
+			}
+			printf("Tecla: %c\n", teclas[3][2]);
+			delay(20);
+		}
+
+		delay(20);
+		digitalWrite(2, LOW);
+
+
+		//columna 4
+		digitalWrite(3, HIGH);digitalWrite(23, HIGH);
+		if(digitalRead(5)){
+			while(digitalRead(5)){
+				delay(20);
+			}
+			printf("Tecla: %c\n", teclas[0][3]);
+			delay(20);
+		}
+
+		if(digitalRead(6)){
+			while(digitalRead(6)){
+				delay(20);
+			}
+			printf("Tecla: %c\n", teclas[1][3]);
+			delay(20);
+		}
+
+		if(digitalRead(12)){
+			while(digitalRead(12)){
+				delay(20);
+			}
+			printf("Tecla: %c\n", teclas[2][3]);
+			delay(20);
+		}
+
+		if(digitalRead(13)){
+			while(digitalRead(13)){
+				delay(20);
+			}
+			printf("Tecla: %c\n", teclas[3][3]);
+			delay(20);
+		}
+
+		delay(20);
+		digitalWrite(3, LOW);
+
+
+	}
+
+
+
+
+	/*
+	pinMode(1,OUTPUT);
+	digitalWrite(1, HIGH);
+	pinMode(0,OUTPUT);
+	pinMode(11,OUTPUT);
+	pinMode(14,OUTPUT);
+	pinMode(17,OUTPUT);
+	pinMode(18,OUTPUT);
+	digitalWrite(0, HIGH);
+
+	pinMode(5, INPUT);
+	while(1){
+		if(digitalRead(5)){
+			digitalWrite(11, HIGH);
+			delay(100);
+			digitalWrite(11, LOW);
+			digitalWrite(14, HIGH);
+			delay(100);
+			digitalWrite(14, LOW);
+			digitalWrite(17, HIGH);
+			delay(100);
+			digitalWrite(17, LOW);
+			digitalWrite(18, HIGH);
+			delay(100);
+			digitalWrite(18, LOW);
+		}
+
+
+	}
+
+
+*/
+
+
+
+	return 0;
+}
