@@ -1,0 +1,48 @@
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <signal.h>
+#include <sys/time.h>
+#include <sched.h>
+
+char* cadena = "CADA SEGUNDO ESCRIBO UNA LETRA\r\n";
+char* pCaracter;
+
+int continue_running=1;
+
+struct itimerval period;
+
+void periodic(int signal1)
+{
+    if (continue_running) {
+        signal(SIGALRM, periodic);
+        printf("%c", (*pCaracter++)); // Print next character in string
+        fflush(stdout); // Will now print everything in the stdout buffer
+
+        if (*pCaracter == '\r')
+        	pCaracter = cadena;
+    }
+    else
+        return;
+}
+
+int main(int argc, char *argv[])
+{
+    struct sched_param schedp;
+    schedp.sched_priority = 1;
+    sched_setscheduler(0, SCHED_FIFO, &schedp);
+
+    pCaracter = cadena;
+    period.it_value.tv_sec = 5;
+    period.it_value.tv_usec = 0;
+    period.it_interval.tv_sec = 1;
+    period.it_interval.tv_usec = 0;
+
+    signal(SIGALRM, periodic); // install periodic() to handle SIGALRM
+    setitimer(ITIMER_REAL, &period, NULL); // start periodic SIGALRM signals
+
+    // Main idle loop: everything done by the signal handler
+    while (1)
+        pause();
+    return 0;
+}
