@@ -1,0 +1,160 @@
+/*
+ * MultipleThreads.cpp
+ *
+ *  Created on: 21/12/2015
+ *      Author: ffm
+ */
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <wiringPi.h>
+
+// A 'key' which we can lock and unlock - values are 0 through 3
+//	This is interpreted internally as a pthread_mutex by wiringPi
+//	which is hiding some of that to make life simple.
+#define	COUNT_KEY	0
+
+// Period time to refresh counter in milisecs
+#define	DELAY_TIME	1000
+
+// Use Pin 0 for wiringPi library
+#define	BUTTON_PIN	20
+
+// Debounce time in milisecs
+#define	DEBOUNCE_TIME	1000
+
+// Counter to update ellapsed time every second
+int count_timer_delay;
+
+// Number of seconds ellapsed
+int count_timer_secs;
+
+// Timeout to avoid bouncing after pin event
+int debounceTime;
+
+//------------------------------------------------------
+// PI_THREAD (myThread0): Thread function for timing
+//------------------------------------------------------
+PI_THREAD (myThread0)
+{
+	(void)piHiPri (10) ;	// Set this thread to be high priority
+
+	while(1) {
+		delay(1); // Wiring Pi function that pauses program execution for at least 1 millisecond
+
+		piLock (COUNT_KEY) ;
+
+		if(count_timer_delay > 0) {
+			count_timer_delay--;	// Decreases counter every 1ms
+		}
+
+		piUnlock (COUNT_KEY) ;
+	}
+}
+
+//------------------------------------------------------
+// void myInterrupt0 (void): external interrupt called every time an event occurs at specified pin
+//------------------------------------------------------
+void myInterrupt0 (void)
+{
+	// Pin event (key / button event) debouncing procedure
+	if (millis () < debounceTime)
+	{
+		debounceTime = millis () + DEBOUNCE_TIME ;
+		return;
+	}
+
+	// We have a valid one
+	piLock (COUNT_KEY);
+
+	count_timer_delay = DELAY_TIME;
+	count_timer_secs = 0;
+
+	printf("RESET\n");
+	fflush(stdout);
+
+	piUnlock (COUNT_KEY);
+
+	// Wait for key to be released
+	while (digitalRead (20) == HIGH) {
+		delay (1) ;
+	}
+
+	debounceTime = millis () + DEBOUNCE_TIME ;
+}
+
+//------------------------------------------------------
+// void sleep(int milisecs): suspends the execution of the  calling thread until the time-out interval elapses
+//------------------------------------------------------
+void sleep(int milisecs)
+{
+	piLock (COUNT_KEY);
+
+	count_timer_delay = milisecs;	// Counter initialisation
+
+	piUnlock (COUNT_KEY);
+
+	while(count_timer_delay > 0);	// Calling process is stalled until counter reaches 0
+
+	return;
+}
+
+//------------------------------------------------------
+// int setup (void): suspends the execution of the  calling thread until the time-out interval elapses
+//------------------------------------------------------
+int setup (void)
+{
+	int x ;
+
+	// sets up the wiringPi library
+	if (wiringPiSetupGpio () < 0) {
+		printf ("Unable to setup wiringPi\n");
+		return -1;
+	}
+
+	// Setup external interrupt at pin 0
+	wiringPiISR (BUTTON_PIN, INT_EDGE_RISING, myInterrupt0) ;
+
+	// Fire off our thread handler
+	x = piThreadCreate (myThread0);
+
+	if (x != 0) {
+		printf ("it didn't start!!!\n");
+		return -1;
+	}
+
+	return 1;
+}
+
+//------------------------------------------------------
+// int main(void): main program
+//------------------------------------------------------
+
+int main(void)
+{
+	// Initial setup
+	if ( setup () < 0 ) {
+		printf("Initialisation problems!!!\n");
+		fflush(stdout); // Will now print everything in the stdout buffer
+	}
+
+	count_timer_secs = 0;
+	debounceTime = 0;
+
+	while(1) {
+		sleep(DELAY_TIME); // Waits for 1 second
+
+		piLock (COUNT_KEY);
+
+		count_timer_secs++; // Updates count value
+
+		printf("%d\n", count_timer_secs); // Prints count value
+		fflush(stdout); // Will now print everything in the stdout buffer
+
+		piUnlock (COUNT_KEY);
+	}
+
+    return 0;
+}
+
